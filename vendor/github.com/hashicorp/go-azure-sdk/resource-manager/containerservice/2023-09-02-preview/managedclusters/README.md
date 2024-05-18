@@ -1,7 +1,7 @@
 
-## `github.com/hashicorp/go-azure-sdk/resource-manager/containerservice/2023-06-02-preview/managedclusters` Documentation
+## `github.com/hashicorp/go-azure-sdk/resource-manager/containerservice/2023-09-02-preview/managedclusters` Documentation
 
-The `managedclusters` SDK allows for interaction with the Azure Resource Manager Service `containerservice` (API Version `2023-06-02-preview`).
+The `managedclusters` SDK allows for interaction with the Azure Resource Manager Service `containerservice` (API Version `2023-09-02-preview`).
 
 This readme covers example usages, but further information on [using this SDK can be found in the project root](https://github.com/hashicorp/go-azure-sdk/tree/main/docs).
 
@@ -9,7 +9,7 @@ This readme covers example usages, but further information on [using this SDK ca
 
 ```go
 import "github.com/hashicorp/go-azure-helpers/resourcemanager/commonids"
-import "github.com/hashicorp/go-azure-sdk/resource-manager/containerservice/2023-06-02-preview/managedclusters"
+import "github.com/hashicorp/go-azure-sdk/resource-manager/containerservice/2023-09-02-preview/managedclusters"
 ```
 
 
@@ -101,6 +101,22 @@ ctx := context.TODO()
 id := managedclusters.NewCommandResultID("12345678-1234-9876-4563-123456789012", "example-resource-group", "managedClusterValue", "commandIdValue")
 
 read, err := client.GetCommandResult(ctx, id)
+if err != nil {
+	// handle the error
+}
+if model := read.Model; model != nil {
+	// do something with the model/response object
+}
+```
+
+
+### Example Usage: `ManagedClustersClient.GetGuardrailsVersions`
+
+```go
+ctx := context.TODO()
+id := managedclusters.NewGuardrailsVersionID("12345678-1234-9876-4563-123456789012", "locationValue", "guardrailsVersionValue")
+
+read, err := client.GetGuardrailsVersions(ctx, id)
 if err != nil {
 	// handle the error
 }
@@ -252,6 +268,23 @@ if err != nil {
 }
 if model := read.Model; model != nil {
 	// do something with the model/response object
+}
+```
+
+
+### Example Usage: `ManagedClustersClient.ListGuardrailsVersions`
+
+```go
+ctx := context.TODO()
+id := managedclusters.NewLocationID("12345678-1234-9876-4563-123456789012", "locationValue")
+
+// alternatively `client.ListGuardrailsVersions(ctx, id)` can be used to do batched pagination
+items, err := client.ListGuardrailsVersionsComplete(ctx, id)
+if err != nil {
+	// handle the error
+}
+for _, item := range items {
+	// do something
 }
 ```
 

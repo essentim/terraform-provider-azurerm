@@ -7,5 +7,5 @@ type GuardrailsProfile struct {
 	ExcludedNamespaces       *[]string `json:"excludedNamespaces,omitempty"`
 	Level                    Level     `json:"level"`
 	SystemExcludedNamespaces *[]string `json:"systemExcludedNamespaces,omitempty"`
-	Version                  string    `json:"version"`
+	Version                  *string   `json:"version,omitempty"`
 }

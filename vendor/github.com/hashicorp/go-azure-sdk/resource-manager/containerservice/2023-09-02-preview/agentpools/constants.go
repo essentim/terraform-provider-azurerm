@@ -96,12 +96,14 @@ type AgentPoolType string
 const (
 	AgentPoolTypeAvailabilitySet         AgentPoolType = "AvailabilitySet"
 	AgentPoolTypeVirtualMachineScaleSets AgentPoolType = "VirtualMachineScaleSets"
+	AgentPoolTypeVirtualMachines         AgentPoolType = "VirtualMachines"
 )
 
 func PossibleValuesForAgentPoolType() []string {
 	return []string{
 		string(AgentPoolTypeAvailabilitySet),
 		string(AgentPoolTypeVirtualMachineScaleSets),
+		string(AgentPoolTypeVirtualMachines),
 	}
 }
 
@@ -122,6 +124,7 @@ func parseAgentPoolType(input string) (*AgentPoolType, error) {
 	vals := map[string]AgentPoolType{
 		"availabilityset":         AgentPoolTypeAvailabilitySet,
 		"virtualmachinescalesets": AgentPoolTypeVirtualMachineScaleSets,
+		"virtualmachines":         AgentPoolTypeVirtualMachines,
 	}
 	if v, ok := vals[strings.ToLower(input)]; ok {
 		return &v, nil
@@ -312,6 +315,7 @@ const (
 	OSSKUCBLMariner            OSSKU = "CBLMariner"
 	OSSKUMariner               OSSKU = "Mariner"
 	OSSKUUbuntu                OSSKU = "Ubuntu"
+	OSSKUWindowsAnnual         OSSKU = "WindowsAnnual"
 	OSSKUWindowsTwoZeroOneNine OSSKU = "Windows2019"
 	OSSKUWindowsTwoZeroTwoTwo  OSSKU = "Windows2022"
 )
@@ -322,6 +326,7 @@ func PossibleValuesForOSSKU() []string {
 		string(OSSKUCBLMariner),
 		string(OSSKUMariner),
 		string(OSSKUUbuntu),
+		string(OSSKUWindowsAnnual),
 		string(OSSKUWindowsTwoZeroOneNine),
 		string(OSSKUWindowsTwoZeroTwoTwo),
 	}
@@ -342,12 +347,13 @@ func (s *OSSKU) UnmarshalJSON(bytes []byte) error {
 
 func parseOSSKU(input string) (*OSSKU, error) {
 	vals := map[string]OSSKU{
-		"azurelinux":  OSSKUAzureLinux,
-		"cblmariner":  OSSKUCBLMariner,
-		"mariner":     OSSKUMariner,
-		"ubuntu":      OSSKUUbuntu,
-		"windows2019": OSSKUWindowsTwoZeroOneNine,
-		"windows2022": OSSKUWindowsTwoZeroTwoTwo,
+		"azurelinux":    OSSKUAzureLinux,
+		"cblmariner":    OSSKUCBLMariner,
+		"mariner":       OSSKUMariner,
+		"ubuntu":        OSSKUUbuntu,
+		"windowsannual": OSSKUWindowsAnnual,
+		"windows2019":   OSSKUWindowsTwoZeroOneNine,
+		"windows2022":   OSSKUWindowsTwoZeroTwoTwo,
 	}
 	if v, ok := vals[strings.ToLower(input)]; ok {
 		return &v, nil

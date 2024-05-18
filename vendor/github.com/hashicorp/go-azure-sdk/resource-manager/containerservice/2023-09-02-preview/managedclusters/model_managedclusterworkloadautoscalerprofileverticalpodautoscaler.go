@@ -4,7 +4,6 @@ package managedclusters
 // Licensed under the MIT License. See NOTICE.txt in the project root for license information.
 
 type ManagedClusterWorkloadAutoScalerProfileVerticalPodAutoscaler struct {
-	ControlledValues ControlledValues `json:"controlledValues"`
-	Enabled          bool             `json:"enabled"`
-	UpdateMode       UpdateMode       `json:"updateMode"`
+	AddonAutoscaling *AddonAutoscaling `json:"addonAutoscaling,omitempty"`
+	Enabled          bool              `json:"enabled"`
 }

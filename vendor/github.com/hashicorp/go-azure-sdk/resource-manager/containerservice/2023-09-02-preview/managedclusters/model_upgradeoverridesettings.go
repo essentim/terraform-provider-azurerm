@@ -10,8 +10,8 @@ import (
 // Licensed under the MIT License. See NOTICE.txt in the project root for license information.
 
 type UpgradeOverrideSettings struct {
-	ControlPlaneOverrides *[]ControlPlaneUpgradeOverride `json:"controlPlaneOverrides,omitempty"`
-	Until                 *string                        `json:"until,omitempty"`
+	ForceUpgrade *bool   `json:"forceUpgrade,omitempty"`
+	Until        *string `json:"until,omitempty"`
 }
 
 func (o *UpgradeOverrideSettings) GetUntilAsTime() (*time.Time, error) {

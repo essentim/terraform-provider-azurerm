@@ -9,6 +9,47 @@ import (
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See NOTICE.txt in the project root for license information.
 
+type AddonAutoscaling string
+
+const (
+	AddonAutoscalingDisabled AddonAutoscaling = "Disabled"
+	AddonAutoscalingEnabled  AddonAutoscaling = "Enabled"
+)
+
+func PossibleValuesForAddonAutoscaling() []string {
+	return []string{
+		string(AddonAutoscalingDisabled),
+		string(AddonAutoscalingEnabled),
+	}
+}
+
+func (s *AddonAutoscaling) UnmarshalJSON(bytes []byte) error {
+	var decoded string
+	if err := json.Unmarshal(bytes, &decoded); err != nil {
+		return fmt.Errorf("unmarshaling: %+v", err)
+	}
+	out, err := parseAddonAutoscaling(decoded)
+	if err != nil {
+		return fmt.Errorf("parsing %q: %+v", decoded, err)
+	}
+	*s = *out
+	return nil
+}
+
+func parseAddonAutoscaling(input string) (*AddonAutoscaling, error) {
+	vals := map[string]AddonAutoscaling{
+		"disabled": AddonAutoscalingDisabled,
+		"enabled":  AddonAutoscalingEnabled,
+	}
+	if v, ok := vals[strings.ToLower(input)]; ok {
+		return &v, nil
+	}
+
+	// otherwise presume it's an undefined value and best-effort it
+	out := AddonAutoscaling(input)
+	return &out, nil
+}
+
 type AgentPoolMode string
 
 const (
@@ -96,12 +137,14 @@ type AgentPoolType string
 const (
 	AgentPoolTypeAvailabilitySet         AgentPoolType = "AvailabilitySet"
 	AgentPoolTypeVirtualMachineScaleSets AgentPoolType = "VirtualMachineScaleSets"
+	AgentPoolTypeVirtualMachines         AgentPoolType = "VirtualMachines"
 )
 
 func PossibleValuesForAgentPoolType() []string {
 	return []string{
 		string(AgentPoolTypeAvailabilitySet),
 		string(AgentPoolTypeVirtualMachineScaleSets),
+		string(AgentPoolTypeVirtualMachines),
 	}
 }
 
@@ -122,6 +165,7 @@ func parseAgentPoolType(input string) (*AgentPoolType, error) {
 	vals := map[string]AgentPoolType{
 		"availabilityset":         AgentPoolTypeAvailabilitySet,
 		"virtualmachinescalesets": AgentPoolTypeVirtualMachineScaleSets,
+		"virtualmachines":         AgentPoolTypeVirtualMachines,
 	}
 	if v, ok := vals[strings.ToLower(input)]; ok {
 		return &v, nil
@@ -211,85 +255,6 @@ func parseCode(input string) (*Code, error) {
 
 	// otherwise presume it's an undefined value and best-effort it
 	out := Code(input)
-	return &out, nil
-}
-
-type ControlPlaneUpgradeOverride string
-
-const (
-	ControlPlaneUpgradeOverrideIgnoreKubernetesDeprecations ControlPlaneUpgradeOverride = "IgnoreKubernetesDeprecations"
-)
-
-func PossibleValuesForControlPlaneUpgradeOverride() []string {
-	return []string{
-		string(ControlPlaneUpgradeOverrideIgnoreKubernetesDeprecations),
-	}
-}
-
-func (s *ControlPlaneUpgradeOverride) UnmarshalJSON(bytes []byte) error {
-	var decoded string
-	if err := json.Unmarshal(bytes, &decoded); err != nil {
-		return fmt.Errorf("unmarshaling: %+v", err)
-	}
-	out, err := parseControlPlaneUpgradeOverride(decoded)
-	if err != nil {
-		return fmt.Errorf("parsing %q: %+v", decoded, err)
-	}
-	*s = *out
-	return nil
-}
-
-func parseControlPlaneUpgradeOverride(input string) (*ControlPlaneUpgradeOverride, error) {
-	vals := map[string]ControlPlaneUpgradeOverride{
-		"ignorekubernetesdeprecations": ControlPlaneUpgradeOverrideIgnoreKubernetesDeprecations,
-	}
-	if v, ok := vals[strings.ToLower(input)]; ok {
-		return &v, nil
-	}
-
-	// otherwise presume it's an undefined value and best-effort it
-	out := ControlPlaneUpgradeOverride(input)
-	return &out, nil
-}
-
-type ControlledValues string
-
-const (
-	ControlledValuesRequestsAndLimits ControlledValues = "RequestsAndLimits"
-	ControlledValuesRequestsOnly      ControlledValues = "RequestsOnly"
-)
-
-func PossibleValuesForControlledValues() []string {
-	return []string{
-		string(ControlledValuesRequestsAndLimits),
-		string(ControlledValuesRequestsOnly),
-	}
-}
-
-func (s *ControlledValues) UnmarshalJSON(bytes []byte) error {
-	var decoded string
-	if err := json.Unmarshal(bytes, &decoded); err != nil {
-		return fmt.Errorf("unmarshaling: %+v", err)
-	}
-	out, err := parseControlledValues(decoded)
-	if err != nil {
-		return fmt.Errorf("parsing %q: %+v", decoded, err)
-	}
-	*s = *out
-	return nil
-}
-
-func parseControlledValues(input string) (*ControlledValues, error) {
-	vals := map[string]ControlledValues{
-		"requestsandlimits": ControlledValuesRequestsAndLimits,
-		"requestsonly":      ControlledValuesRequestsOnly,
-	}
-	if v, ok := vals[strings.ToLower(input)]; ok {
-		return &v, nil
-	}
-
-	// otherwise presume it's an undefined value and best-effort it
-	out := ControlledValues(input)
 	return &out, nil
 }
 
@@ -428,6 +393,47 @@ func parseGPUInstanceProfile(input string) (*GPUInstanceProfile, error) {
 
 	// otherwise presume it's an undefined value and best-effort it
 	out := GPUInstanceProfile(input)
+	return &out, nil
+}
+
+type GuardrailsSupport string
+
+const (
+	GuardrailsSupportPreview GuardrailsSupport = "Preview"
+	GuardrailsSupportStable  GuardrailsSupport = "Stable"
+)
+
+func PossibleValuesForGuardrailsSupport() []string {
+	return []string{
+		string(GuardrailsSupportPreview),
+		string(GuardrailsSupportStable),
+	}
+}
+
+func (s *GuardrailsSupport) UnmarshalJSON(bytes []byte) error {
+	var decoded string
+	if err := json.Unmarshal(bytes, &decoded); err != nil {
+		return fmt.Errorf("unmarshaling: %+v", err)
+	}
+	out, err := parseGuardrailsSupport(decoded)
+	if err != nil {
+		return fmt.Errorf("parsing %q: %+v", decoded, err)
+	}
+	*s = *out
+	return nil
+}
+
+func parseGuardrailsSupport(input string) (*GuardrailsSupport, error) {
+	vals := map[string]GuardrailsSupport{
+		"preview": GuardrailsSupportPreview,
+		"stable":  GuardrailsSupportStable,
+	}
+	if v, ok := vals[strings.ToLower(input)]; ok {
+		return &v, nil
+	}
+
+	// otherwise presume it's an undefined value and best-effort it
+	out := GuardrailsSupport(input)
 	return &out, nil
 }
 
@@ -1149,6 +1155,7 @@ const (
 	NetworkPolicyAzure  NetworkPolicy = "azure"
 	NetworkPolicyCalico NetworkPolicy = "calico"
 	NetworkPolicyCilium NetworkPolicy = "cilium"
+	NetworkPolicyNone   NetworkPolicy = "none"
 )
 
 func PossibleValuesForNetworkPolicy() []string {
@@ -1156,6 +1163,7 @@ func PossibleValuesForNetworkPolicy() []string {
 		string(NetworkPolicyAzure),
 		string(NetworkPolicyCalico),
 		string(NetworkPolicyCilium),
+		string(NetworkPolicyNone),
 	}
 }
 
@@ -1177,6 +1185,7 @@ func parseNetworkPolicy(input string) (*NetworkPolicy, error) {
 		"azure":  NetworkPolicyAzure,
 		"calico": NetworkPolicyCalico,
 		"cilium": NetworkPolicyCilium,
+		"none":   NetworkPolicyNone,
 	}
 	if v, ok := vals[strings.ToLower(input)]; ok {
 		return &v, nil
@@ -1234,6 +1243,47 @@ func parseNodeOSUpgradeChannel(input string) (*NodeOSUpgradeChannel, error) {
 	return &out, nil
 }
 
+type NodeProvisioningMode string
+
+const (
+	NodeProvisioningModeAuto   NodeProvisioningMode = "Auto"
+	NodeProvisioningModeManual NodeProvisioningMode = "Manual"
+)
+
+func PossibleValuesForNodeProvisioningMode() []string {
+	return []string{
+		string(NodeProvisioningModeAuto),
+		string(NodeProvisioningModeManual),
+	}
+}
+
+func (s *NodeProvisioningMode) UnmarshalJSON(bytes []byte) error {
+	var decoded string
+	if err := json.Unmarshal(bytes, &decoded); err != nil {
+		return fmt.Errorf("unmarshaling: %+v", err)
+	}
+	out, err := parseNodeProvisioningMode(decoded)
+	if err != nil {
+		return fmt.Errorf("parsing %q: %+v", decoded, err)
+	}
+	*s = *out
+	return nil
+}
+
+func parseNodeProvisioningMode(input string) (*NodeProvisioningMode, error) {
+	vals := map[string]NodeProvisioningMode{
+		"auto":   NodeProvisioningModeAuto,
+		"manual": NodeProvisioningModeManual,
+	}
+	if v, ok := vals[strings.ToLower(input)]; ok {
+		return &v, nil
+	}
+
+	// otherwise presume it's an undefined value and best-effort it
+	out := NodeProvisioningMode(input)
+	return &out, nil
+}
+
 type OSDiskType string
 
 const (
@@ -1282,6 +1332,7 @@ const (
 	OSSKUCBLMariner            OSSKU = "CBLMariner"
 	OSSKUMariner               OSSKU = "Mariner"
 	OSSKUUbuntu                OSSKU = "Ubuntu"
+	OSSKUWindowsAnnual         OSSKU = "WindowsAnnual"
 	OSSKUWindowsTwoZeroOneNine OSSKU = "Windows2019"
 	OSSKUWindowsTwoZeroTwoTwo  OSSKU = "Windows2022"
 )
@@ -1292,6 +1343,7 @@ func PossibleValuesForOSSKU() []string {
 		string(OSSKUCBLMariner),
 		string(OSSKUMariner),
 		string(OSSKUUbuntu),
+		string(OSSKUWindowsAnnual),
 		string(OSSKUWindowsTwoZeroOneNine),
 		string(OSSKUWindowsTwoZeroTwoTwo),
 	}
@@ -1312,12 +1364,13 @@ func (s *OSSKU) UnmarshalJSON(bytes []byte) error {
 
 func parseOSSKU(input string) (*OSSKU, error) {
 	vals := map[string]OSSKU{
-		"azurelinux":  OSSKUAzureLinux,
-		"cblmariner":  OSSKUCBLMariner,
-		"mariner":     OSSKUMariner,
-		"ubuntu":      OSSKUUbuntu,
-		"windows2019": OSSKUWindowsTwoZeroOneNine,
-		"windows2022": OSSKUWindowsTwoZeroTwoTwo,
+		"azurelinux":    OSSKUAzureLinux,
+		"cblmariner":    OSSKUCBLMariner,
+		"mariner":       OSSKUMariner,
+		"ubuntu":        OSSKUUbuntu,
+		"windowsannual": OSSKUWindowsAnnual,
+		"windows2019":   OSSKUWindowsTwoZeroOneNine,
+		"windows2022":   OSSKUWindowsTwoZeroTwoTwo,
 	}
 	if v, ok := vals[strings.ToLower(input)]; ok {
 		return &v, nil
@@ -1703,53 +1756,6 @@ func parseServiceMeshMode(input string) (*ServiceMeshMode, error) {
 
 	// otherwise presume it's an undefined value and best-effort it
 	out := ServiceMeshMode(input)
-	return &out, nil
-}
-
-type UpdateMode string
-
-const (
-	UpdateModeAuto     UpdateMode = "Auto"
-	UpdateModeInitial  UpdateMode = "Initial"
-	UpdateModeOff      UpdateMode = "Off"
-	UpdateModeRecreate UpdateMode = "Recreate"
-)
-
-func PossibleValuesForUpdateMode() []string {
-	return []string{
-		string(UpdateModeAuto),
-		string(UpdateModeInitial),
-		string(UpdateModeOff),
-		string(UpdateModeRecreate),
-	}
-}
-
-func (s *UpdateMode) UnmarshalJSON(bytes []byte) error {
-	var decoded string
-	if err := json.Unmarshal(bytes, &decoded); err != nil {
-		return fmt.Errorf("unmarshaling: %+v", err)
-	}
-	out, err := parseUpdateMode(decoded)
-	if err != nil {
-		return fmt.Errorf("parsing %q: %+v", decoded, err)
-	}
-	*s = *out
-	return nil
-}
-
-func parseUpdateMode(input string) (*UpdateMode, error) {
-	vals := map[string]UpdateMode{
-		"auto":     UpdateModeAuto,
-		"initial":  UpdateModeInitial,
-		"off":      UpdateModeOff,
-		"recreate": UpdateModeRecreate,
-	}
-	if v, ok := vals[strings.ToLower(input)]; ok {
-		return &v, nil
-	}
-
-	// otherwise presume it's an undefined value and best-effort it
-	out := UpdateMode(input)
 	return &out, nil
 }
 
