@@ -3321,20 +3321,14 @@ func flattenKubernetesClusterWorkloadAutoscalerProfile(profile *managedclusters.
 	}
 
 	vpaEnabled := false
-	controlledValues := ""
-	updateMode := ""
 	if v := profile.VerticalPodAutoscaler; v != nil && v.Enabled {
 		vpaEnabled = v.Enabled
-		controlledValues = string(v.ControlledValues)
-		updateMode = string(v.UpdateMode)
 	}
 
 	return []interface{}{
 		map[string]interface{}{
-			"keda_enabled":                              kedaEnabled,
-			"vertical_pod_autoscaler_enabled":           vpaEnabled,
-			"vertical_pod_autoscaler_update_mode":       updateMode,
-			"vertical_pod_autoscaler_controlled_values": controlledValues,
+			"keda_enabled":                    kedaEnabled,
+			"vertical_pod_autoscaler_enabled": vpaEnabled,
 		},
 	}
 }
@@ -4681,11 +4675,6 @@ func flattenKubernetesClusterIngressProfile(input *managedclusters.ManagedCluste
 		return []interface{}{}
 	}
 
-	dnsZoneId := ""
-	if v := input.WebAppRouting.DnsZoneResourceId; v != nil {
-		dnsZoneId = *v
-	}
-
 	webAppRoutingIdentity := []interface{}{}
 
 	if v := input.WebAppRouting.Identity; v != nil {
@@ -4694,7 +4683,6 @@ func flattenKubernetesClusterIngressProfile(input *managedclusters.ManagedCluste
 
 	return []interface{}{
 		map[string]interface{}{
-			"dns_zone_id":              dnsZoneId,
 			"web_app_routing_identity": webAppRoutingIdentity,
 		},
 	}
