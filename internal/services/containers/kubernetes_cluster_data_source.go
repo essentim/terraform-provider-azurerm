@@ -1465,20 +1465,21 @@ func flattenKubernetesClusterDataSourceMicrosoftDefender(input *managedclusters.
 }
 
 func flattenKubernetesClusterDataSourceUpgradeSettings(input *managedclusters.AgentPoolUpgradeSettings) []interface{} {
-	maxSurge := ""
+	values := make(map[string]interface{})
+
 	if input != nil && input.MaxSurge != nil {
-		maxSurge = *input.MaxSurge
+		values["max_surge"] = *input.MaxSurge
 	}
 
-	if maxSurge == "" {
-		return []interface{}{}
+	if input != nil && input.DrainTimeoutInMinutes != nil {
+		values["drain_timeout_in_minutes"] = *input.DrainTimeoutInMinutes
 	}
 
-	return []interface{}{
-		map[string]interface{}{
-			"max_surge": maxSurge,
-		},
+	if input != nil && input.DrainTimeoutInMinutes != nil {
+		values["node_soak_duration_in_minutes"] = *input.NodeSoakDurationInMinutes
 	}
+
+	return []interface{}{values}
 }
 
 func flattenCustomCaTrustCerts(input *managedclusters.ManagedClusterSecurityProfile) []interface{} {

@@ -1137,6 +1137,14 @@ func upgradeSettingsSchema() *pluginsdk.Schema {
 						Type:     pluginsdk.TypeString,
 						Required: true,
 					},
+					"drain_timeout_in_minutes": {
+						Type:     pluginsdk.TypeInt,
+						Optional: true,
+					},
+					"node_soak_duration_in_minutes": {
+						Type:     pluginsdk.TypeInt,
+						Optional: true,
+					},
 				},
 			},
 		}
@@ -1152,6 +1160,14 @@ func upgradeSettingsSchema() *pluginsdk.Schema {
 					Optional: true,
 					Default:  "10%",
 				},
+				"drain_timeout_in_minutes": {
+					Type:     pluginsdk.TypeInt,
+					Optional: true,
+				},
+				"node_soak_duration_in_minutes": {
+					Type:     pluginsdk.TypeInt,
+					Optional: true,
+				},
 			},
 		},
 	}
@@ -1164,6 +1180,14 @@ func upgradeSettingsForDataSourceSchema() *pluginsdk.Schema {
 		Elem: &pluginsdk.Resource{
 			Schema: map[string]*pluginsdk.Schema{
 				"max_surge": {
+					Type:     pluginsdk.TypeString,
+					Computed: true,
+				},
+				"drain_timeout_in_minutes": {
+					Type:     pluginsdk.TypeString,
+					Computed: true,
+				},
+				"node_soak_duration_in_minutes": {
 					Type:     pluginsdk.TypeString,
 					Computed: true,
 				},
@@ -1223,24 +1247,31 @@ func expandAgentPoolUpgradeSettings(input []interface{}) *agentpools.AgentPoolUp
 	if maxSurgeRaw := v["max_surge"].(string); maxSurgeRaw != "" {
 		setting.MaxSurge = utils.String(maxSurgeRaw)
 	}
+	if drainTimeoutInMinutesRaw, ok := v["drain_timeout_in_minutes"].(int); ok {
+		setting.DrainTimeoutInMinutes = utils.Int64(int64(drainTimeoutInMinutesRaw))
+	}
+	if nodeSoakDurationInMinutesRaw, ok := v["node_soak_duration_in_minutes"].(int); ok {
+		setting.NodeSoakDurationInMinutes = utils.Int64(int64(nodeSoakDurationInMinutesRaw))
+	}
 	return setting
 }
 
 func flattenAgentPoolUpgradeSettings(input *agentpools.AgentPoolUpgradeSettings) []interface{} {
-	maxSurge := ""
-	if input != nil && input.MaxSurge != nil {
-		maxSurge = *input.MaxSurge
+	values := make(map[string]interface{})
+
+	if input != nil && input.MaxSurge != nil && *input.MaxSurge != "" {
+		values["max_surge"] = *input.MaxSurge
 	}
 
-	if maxSurge == "" {
-		return []interface{}{}
+	if input != nil && input.DrainTimeoutInMinutes != nil {
+		values["drain_timeout_in_minutes"] = *input.DrainTimeoutInMinutes
 	}
 
-	return []interface{}{
-		map[string]interface{}{
-			"max_surge": maxSurge,
-		},
+	if input != nil && input.NodeSoakDurationInMinutes != nil {
+		values["node_soak_duration_in_minutes"] = *input.NodeSoakDurationInMinutes
 	}
+
+	return []interface{}{values}
 }
 
 func expandNodeLabels(input map[string]interface{}) *map[string]string {
